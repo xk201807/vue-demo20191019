@@ -1,10 +1,8 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/>    
-    <Login />    -->
+    <!-- <img alt="Vue logo" src="./assets/logo.png">
     <router-link to="/hello">hello</router-link>
-    <router-link to="/login">login</router-link>
+    <router-link to="/login">login</router-link> -->
     <router-view></router-view>
   </div>
 </template>
