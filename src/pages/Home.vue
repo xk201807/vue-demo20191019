@@ -4,7 +4,7 @@
       <div class="cards_left">
         <ul>
           <li class="card_item">
-            <h1>后台项目</h1>
+            <h1 class="title">后台项目</h1>
             <p><a href="#">mall</a></p>
           </li>
           <li class="card_item">
@@ -42,17 +42,162 @@
 
       </div>
     </div>
+    <div class="todo_box">
+      <h1 class="title">待处理事务</h1>
+      <div class="todo_content">
+        <ul>
+          <li>
+            <div class="todo_item">
+              <p>
+                待付款订单
+              </p>
+                <span>（{{todoDataList.orderTobePaid}}）</span>
+            </div>
+            <div class="todo_item">
+              <p>
+                待发货订单
+              </p>
+                <span>（{{todoDataList.pendingOrders}}）</span>
+            </div>
+            <div class="todo_item">
+              <p>
+                已发货订单
+              </p>
+                <span>（{{todoDataList.ShippedOrder}}）</span>
+            </div>
+          </li>
+          <li>
+            <div class="todo_item">
+              <p>
+                已完成订单
+              </p>
+                <span>（{{todoDataList.completedOrder}}）</span>
+            </div>
+            <div class="todo_item">
+              <p>
+                新缺货登记
+              </p>
+                <span>（{{todoDataList.NewShortageRegister}}）</span>
+            </div>
+            <div class="todo_item">
+              <p>
+                待处理退货订单
+              </p>
+                <span>（{{todoDataList.PendingReturnOrder}}）</span>
+            </div>
+          </li>
+          <li>
+            <div class="todo_item">
+              <p>
+                待确认收货订单
+              </p>
+                <span>（{{todoDataList.ReceivingOrder}}）</span>
+            </div>
+            <div class="todo_item">
+              <p>
+                待处理退款申请
+              </p>
+                <span>（{{todoDataList.PendingRefundApplication}}）</span>
+            </div>
+            <div class="todo_item">
+              <p>
+                广告位即将到期
+              </p>
+                <span>（{{todoDataList.AdvSpaceToExpire}}）</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="overView_box">
+      <div class="productOverView_box">
+        <h1 class="title">商品总览</h1>
+        <ul>
+          <li>
+            <span>{{overViewDataList.hasBeenOff}}</span>
+            <span>已下架</span>
+          </li>
+           <li>
+            <span>{{overViewDataList.hasBeenOn}}</span>
+            <span>已上架</span>
+          </li>
+           <li>
+            <span>{{overViewDataList.inventoryNervous}}</span>
+            <span>库存紧张</span>
+          </li>
+           <li>
+            <span>{{overViewDataList.allGoods}}</span>
+            <span>全部商品</span>
+          </li>
+        </ul>
+      </div>
+      <div class="userOverView_box">
+        <h1 class="title">用户总览</h1>
+        <ul>
+          <li>
+            <span>{{overViewDataList.todayNew}}</span>
+            <span>今日新增</span>
+          </li>
+           <li>
+            <span>{{overViewDataList.yesterdayNew}}</span>
+            <span>昨日新增</span>
+          </li>
+           <li>
+            <span>{{overViewDataList.monthNew}}</span>
+            <span>本月新增</span>
+          </li>
+           <li>
+            <span>{{overViewDataList.totalmembers}}</span>
+            <span>会员总数</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="orderStatistics_box">
+      <h1 class="title">订单统计</h1>
+      <div class="order_l">
+        <ul>
+          <li>
+            <p>本月订单总数</p>
+            <p>{{orderSaleComList.monthOrder}}</p>
+            <p><span :class="[monthOrderCom > 0 ?'bgGreen':'bgRed']">{{monthOrderCom}}%</span> <span>同比上月</span></p>
+          </li>
+          <li>
+            <p>本周订单总数</p>
+            <p>{{orderSaleComList.weekOrder}}</p>
+            <p><span :class="[weekOrderCom > 0 ? 'bgGreen':'bgRed']">{{weekOrderCom}}%</span> <span>同比上周</span></p>
+          </li>
+          <li>
+            <p>本月销售总额</p>
+            <p>{{orderSaleComList.monthSale}}</p>
+            <p><span :class ="[monthSaleCom > 0 ? 'bgGreen':'bgRed']">{{monthSaleCom}}%</span> <span>同比上月</span></p>
+          </li>
+          <li>
+            <p>本周销售总额</p>
+            <p>{{orderSaleComList.weekSale}}</p>
+            <p><span :class="[weekSaleCom > 0 ? 'bgGreen':'bgRed']">{{weekSaleCom}}%</span> <span>同比上周</span></p>
+          </li>
+        </ul>
+      </div>
+      <div class="order_r"></div>
+    </div>
   </div>
 </template>
 
 <script>
-import {getHomeTop} from '@/api/home'
+import {getHomeTop} from '@/api/home';
+import {todoData} from '@/api/home';
+import {overViewData} from '@/api/home';
+import {orderSaleCom} from '@/api/home'
+
 
 export default {
   data () {
     return{
       detailData:{},
-      
+      todoDataList:{},
+      overViewDataList:{},
+      orderSaleComList:{},
     }
   },
   mounted () {
@@ -65,7 +210,55 @@ export default {
     init () {
       getHomeTop().then(res => {
         this.detailData = res.data
+      });
+      todoData().then(res=>{
+        this.todoDataList = res.data
+      });
+      overViewData().then(res=>{
+        this.overViewDataList = res.data
+      });
+      orderSaleCom().then(res=>{
+        this.orderSaleComList = res.data
       })
+
+    }
+  },
+  computed:{
+    monthOrderCom:function(){
+      if(this.orderSaleComList.monthOrder && this.orderSaleComList.monthOrder!='0' && this.orderSaleComList.lastMonthOrder){
+
+        let monthOrderNum = (Number(this.orderSaleComList.monthOrder)- Number(this.orderSaleComList.lastMonthOrder))/Number(this.orderSaleComList.monthOrder);
+        return Number(monthOrderNum*100).toFixed(2)
+      }else{
+        return ''
+      }
+    },
+    weekOrderCom:function(){
+      if(this.orderSaleComList.weekOrder && this.orderSaleComList.weekOrder!='0' && this.orderSaleComList.lastWeekOrder){
+        let weekOrderNum = (Number(this.orderSaleComList.weekOrder)- Number(this.orderSaleComList.lastWeekOrder))/Number(this.orderSaleComList.weekOrder);
+        return Number(weekOrderNum *100).toFixed(2)
+
+      }else{
+        return ''
+      }
+    },
+    monthSaleCom:function(){
+      if(this.orderSaleComList.monthSale && this.orderSaleComList.monthSale!='0' && this.orderSaleComList.lastMonthSale){
+        let monthSaleNum = (Number(this.orderSaleComList.monthSale)- Number(this.orderSaleComList.lastMonthSale))/Number(this.orderSaleComList.monthSale);
+        return Number(monthSaleNum *100).toFixed(2)
+
+      }else{
+        return ''
+      }
+    },
+    weekSaleCom:function(){
+      if(this.orderSaleComList.weekSale && this.orderSaleComList.weekSale!='0' && this.orderSaleComList.lastWeekSale){
+        let weekSaleNum = (Number(this.orderSaleComList.weekSale)- Number(this.orderSaleComList.lastWeekSale))/Number(this.orderSaleComList.weekSale);
+        return Number(weekSaleNum *100).toFixed(2)
+
+      }else{
+        return ''
+      }
     }
   }
 }
@@ -75,8 +268,20 @@ export default {
 *{
   padding:0;
   margin:0;
-  box-sizing: border-box;
+  box-sizing: border-box;  
 }
+ul{
+  list-style: none;
+}
+.title{
+  text-align: left;
+  height: 50px;
+  line-height: 50px;
+  background: #f2f6fc;
+  padding-left: 30px;
+  font-size: 16px;
+}
+
 .home{
   margin: 0 auto;
   
@@ -92,12 +297,12 @@ export default {
         flex-wrap: wrap;
         li.card_item{
           text-align:left;
-          width:30%;
+          width:32%;
           border: 1px solid #ddd;
           h1{
             padding-left :30px;
             box-sizing: border-box;
-            background :#eee;
+            background :#f2f6fc;
             font-size:16px;
             height :50px;
             line-height:50px;
@@ -148,6 +353,121 @@ export default {
       width: 250px;
       height: 235px;
       background: #ddd;
+    }
+  }
+  .todo_box{
+    margin-top: 20px;
+    border: 1px solid #dcdfe6;
+    h1{
+      height: 50px;
+      line-height: 50px;
+      background: #f2f6fc;
+      padding-left: 30px;
+      text-align: left;
+      font-size: 16px;
+    }
+    .todo_content{
+      padding:30px 60px 20px 60px;       
+      ul{
+        display: flex;
+        justify-content: space-around;
+        li{
+          width: 30%;
+          div.todo_item{
+            width: 100%;
+            border-bottom: 1px solid #ebeef5;
+            height: 39px;
+            line-height: 39px;
+            display: flex;
+            justify-content: space-between;
+            p{
+              padding-left: 10px;
+              width: clac('100% - 30px');
+            }
+          }
+        }
+      }
+    }
+
+  }
+  .overView_box{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    .productOverView_box,.userOverView_box{
+      border: 1px solid #dcdfe6;
+      width: 49%;
+      h1{
+        font-size: 16px;
+        padding-left: 30px;
+        height: 50px;
+        line-height: 50px;
+        background: #f2f6fc;
+      }
+      ul{
+        display: flex;
+        justify-content: space-around;
+        padding: 40px;
+        li{
+          font-size: 16px;
+          span{
+            display: inline-block;
+            width: 100%;
+          }
+          span:nth-child(1){
+            color: #f56c6c;
+            margin-bottom: 10px;
+            font-size: 24px;
+          }
+        }
+      }
+    }
+  }
+  .orderStatistics_box{
+    margin-top: 20px;
+    border: 1px solid #dcdfe6;
+    .order_l{
+      width: 200px;
+      border-right: 1px solid #dcdfe6;
+      ul{
+        padding: 20px;
+        text-align: initial;
+        li{
+          font-size: 14px;
+          margin-top: 20px;
+          &:first-child{
+            margin-top: 0;
+          }
+          p{
+            &:nth-child(1){
+              color:rgb(144, 147, 153); 
+            }
+            &:nth-child(2){
+              font-size: 24px;
+              padding: 10px 0;
+              
+            }
+            &:nth-child(3){
+              color: rgb(192, 196, 204);
+              span{
+                &.bgGreen{
+                color: #67c23a;
+                &::before{
+                  content:'+';
+                }
+                }
+                &.bgRed{
+                  color: #f56c6c;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .order_r{
+      width: 100%;
+      padding-left: 200px;
     }
   }
 }
