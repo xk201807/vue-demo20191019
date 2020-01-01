@@ -12,6 +12,7 @@
     "core-js": "^3.1.2",
     "element-ui": "^2.13.0",
     "eslint": "^6.7.2",
+    "mint-ui": "^2.2.13",
     "mockjs": "^1.1.0",
     "node-sass": "^4.13.0",
     "sass-loader": "^8.0.0",

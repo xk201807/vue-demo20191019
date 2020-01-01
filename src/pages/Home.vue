@@ -4,8 +4,26 @@
       <div class="cards_left">
         <ul>
           <li class="card_item">
-            <h1 class="title">后台项目</h1>
+            <h1 class="title" @click='popup'>后台项目</h1>
             <p><a href="#">mall</a></p>
+            <div class="popBox" v-show="isPopShow">
+              <ul>
+                <li>
+                  <router-link to='/ProductList'>
+                    <img src="" alt="">
+                    <span>数据来源</span>
+                  </router-link>
+                  <router-link to='/ProductList'>
+                    <img src="" alt="">
+                    <span>数据来源</span>
+                  </router-link>
+                  <router-link to='/ProductList'>
+                    <img src="" alt="">
+                    <span>数据来源</span>
+                  </router-link>
+                </li>
+              </ul>
+            </div>
           </li>
           <li class="card_item">
             <h1>前端项目</h1>
@@ -181,6 +199,7 @@
       </div>
       <div class="order_r"></div>
     </div>
+    
   </div>
 </template>
 
@@ -188,7 +207,9 @@
 import {getHomeTop} from '@/api/home';
 import {todoData} from '@/api/home';
 import {overViewData} from '@/api/home';
-import {orderSaleCom} from '@/api/home'
+import {orderSaleCom} from '@/api/home';
+
+
 
 
 export default {
@@ -198,13 +219,14 @@ export default {
       todoDataList:{},
       overViewDataList:{},
       orderSaleComList:{},
+      isPopShow:false,
     }
   },
   mounted () {
     this.$nextTick(()=>{
       this.init()
     })
-   
+    this.isPopShow=false
   },
   methods: {
     init () {
@@ -219,8 +241,13 @@ export default {
       });
       orderSaleCom().then(res=>{
         this.orderSaleComList = res.data
-      })
+      });
+      
 
+    },
+    popup(){
+      console.log(123)
+      this.isPopShow = !this.isPopShow;
     }
   },
   computed:{
@@ -299,6 +326,9 @@ ul{
           text-align:left;
           width:32%;
           border: 1px solid #ddd;
+          &:nth-child(1){
+            position: relative;
+          }
           h1{
             padding-left :30px;
             box-sizing: border-box;
@@ -472,5 +502,49 @@ ul{
   }
 }
 
+.popBox{
+  position: absolute;
+  width: 200px;
+  border-radius: 8px;
+  padding: 10px;
+  background: #fff;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transition: .2s ease-out;
+  transition: .2s ease-out;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%);
+  &:before{
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border: solid transparent;
+    border-width: 10px;
+    border-bottom-color: #fff;
+    content: "";
+    position: absolute;
+    top: -20px;
+    right: 50px;
+  }
+  ul{
+    li{
+      a{
+        display: block;
+        height: 30px;
+        line-height: 30px;
+        text-decoration:none;
+        color: initial;
+        img{
+          width: 15px;
+          height: 15px;
+          background: red;
+          display: inline-block;
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+}
   </style>
 
